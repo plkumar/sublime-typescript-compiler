@@ -1,4 +1,9 @@
 {
+	//uncomment the below 2 lines for windows and update the username and comment the next two lines
+	//"node_path"       : "c:\\Program Files (x86)\\nodejs\\node.exe",
+    //"typescript_path" : "C:\\Users\\<username>\\AppData\\Roaming\\npm\\tsc.cmd",
+
     "node_path"       : "/usr/local/bin/node",
-    "typescript_path" : "/usr/local/share/npm/bin/tsc"
+    "typescript_path" : "/usr/local/share/npm/bin/tsc",
+    "declaration":"True"
 }
