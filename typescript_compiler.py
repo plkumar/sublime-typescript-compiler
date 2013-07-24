@@ -17,23 +17,28 @@ DEBUG = True
 # Used in case the configuration is not found in 'sublime.settings'
 DEFAULT_NODE_PATH       = '/usr/local/bin/node'
 DEFAULT_TYPESCRIPT_PATH = '/usr/local/bin/tsc'
+DEFAULT_DECLARATION_ON = False;
 
 class TypescriptCommand(sublime_plugin.TextCommand): 
     def run(self, edit):
         self.config          = sublime.load_settings("TypeScript Compiler.sublime-settings")
         self.node_path       = DEFAULT_NODE_PATH
         self.typescript_path = DEFAULT_TYPESCRIPT_PATH
+        self.declaration_file_on = DEFAULT_DECLARATION_ON
 
         if(self.config):
             if(self.config.get("node_path")):
                 self.node_path = self.config.get("node_path")
             if(self.config.get("typescript_path")):
                 self.typescript_path = self.config.get("typescript_path")
+            if(self.config.get("declaration")):
+                self.declaration_file_on=self.config.get("declaration")
 
         if(DEBUG):
             print("* TypeScript Compiler running...")
             print("  - Node.js path: %s" % self.node_path)
             print("  - TypeScript complier path: %s" % self.typescript_path)
+            print("  - TypeScript declaration file generation: %s" % self.declaration_file_on)
 
         source = self.get_content();
         
@@ -79,8 +84,14 @@ class TypescriptCommand(sublime_plugin.TextCommand):
             print "  - Destination plain JavaScript file: %s" % self.destinationfilename
             print "  - Working directory: %s" % self.workingdir
 
-        commandline = [ self.node_path,
-                        self.typescript_path,
+        if self.declaration_file_on=="True":
+            commandline = [ self.typescript_path,
+                        '--declaration',
+                        '--out',
+                        self.destinationfilename,
+                        self.sourcefilename];
+        else:
+            commandline = [ self.typescript_path,
                         '--out',
                         self.destinationfilename,
                         self.sourcefilename];
